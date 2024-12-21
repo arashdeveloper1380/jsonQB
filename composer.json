@@ -1,0 +1,23 @@
+{
+  "name": "arashdeveloper1380/json-qb",
+  "description": "A JSON-based query builder library for PHP",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Core\\": "src/"
+    },
+    "files": [
+      "src/helper.php"
+    ]
+  },
+  "require-dev": {
+    "symfony/var-dumper": "^7.2",
+    "pestphp/pest": "^3.7"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  }
+}

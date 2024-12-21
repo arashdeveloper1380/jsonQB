@@ -1,0 +1,1 @@
+{"version":"pest_3.7.1","defects":{"P\\Tests\\JsonQueryBuilderTest::__pest_evaluable_it_can_fetch_all_data":7},"times":{"P\\Tests\\Feature\\ExampleTest::__pest_evaluable_example":0.006,"P\\Tests\\JsonQueryBuilderTest::__pest_evaluable_it_can_fetch_all_data":3.114,"P\\Tests\\Unit\\ExampleTest::__pest_evaluable_example":0}}
