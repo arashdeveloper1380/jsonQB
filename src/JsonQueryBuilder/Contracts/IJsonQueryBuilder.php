@@ -55,7 +55,7 @@ interface IJsonQueryBuilder{
     /**
      * @return array|null
      */
-    public function first() : ? array;
+    public function first() : self | array;
 
     /**
      * @param string $key
@@ -91,7 +91,7 @@ interface IJsonQueryBuilder{
      * @param int $per_page
      * @return array
      */
-    public function paginate(int $page, int $per_page) : array;
+    public function paginate(int $page, int $perPage): array;
 
     /**
      * @param callable $callable
@@ -107,15 +107,100 @@ interface IJsonQueryBuilder{
     public function aggregate(string $key, string $function): mixed;
 
     /**
-     * @param string $field
+     * @param string $key
      * @return array
      */
-    public function pluck(string $field): array;
+    public function pluck(string $key): array;
+
+    /**
+     * @param string $key
+     * @return $this
+     */
+    public function groupBy(string $key): self;
 
     /**
      * @param string $key
      * @return $this
      */
     public function distinct(string $key): self;
+
+    /**
+     * @param string $key
+     * @param string $operator
+     * @param mixed $value
+     * @return $this
+     */
+    public function having(string $aggregate, string $operator, mixed $value): self;
+
+    /**
+     * @return mixed
+     */
+    public function latest(): mixed;
+
+    /**
+     * @return mixed
+     */
+    public function randomFirst() : mixed;
+
+    /**
+     * @return array|null
+     */
+    public function randomGet() : ? array;
+
+    /**
+     * @param string $time
+     * @return array|null
+     */
+    public function oldest(string $time) : ? array;
+
+    /**
+     * @param string $time
+     * @return array|null
+     */
+    public function newest(string $time) : ? array;
+
+    /**
+     * @return bool
+     */
+    public function dostExists() : bool;
+
+    /**
+     * @param int $count
+     * @return $this
+     */
+    public function skip(int $count): self;
+
+    /**
+     * @return array|null
+     */
+    public function keys() : ? array;
+
+    /**
+     * @param string $key
+     * @param string $direction
+     * @return $this
+     */
+    public function sort(string $key, string $direction = 'asc') : self;
+
+    /**
+     * @param callable $callback
+     * @return $this
+     */
+    public function transform(callable $callback) : self;
+
+    /**
+     * @param string $key
+     * @param array $values
+     * @return $this
+     */
+    public function whereIn(string $key, array $values) : self;
+
+    /**
+     * @param callable $callback
+     * @return $this
+     */
+    public function tap(callable $callback): self;
+
+
 
 }
