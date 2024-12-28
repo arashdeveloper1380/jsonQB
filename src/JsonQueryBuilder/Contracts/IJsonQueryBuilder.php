@@ -26,6 +26,26 @@ interface IJsonQueryBuilder{
 
     /**
      * @param string $key
+     * @param array $values
+     * @return $this
+     */
+    public function whereNotIn(string $key, array $values): self;
+    /**
+     * @param string $key
+     * @param array $range
+     * @return $this
+     */
+    public function whereBetween(string $key, array $range): self;
+
+    /**
+     * @param string $key
+     * @param array $range
+     * @return $this
+     */
+    public function whereNotBetween(string $key, array $range): self;
+
+    /**
+     * @param string $key
      * @param mixed $value
      * @return $this
      */
@@ -88,7 +108,7 @@ interface IJsonQueryBuilder{
 
     /**
      * @param int $page
-     * @param int $per_page
+     * @param int $perPage
      * @return array
      */
     public function paginate(int $page, int $perPage): array;
@@ -125,7 +145,7 @@ interface IJsonQueryBuilder{
     public function distinct(string $key): self;
 
     /**
-     * @param string $key
+     * @param string $aggregate
      * @param string $operator
      * @param mixed $value
      * @return $this
@@ -200,6 +220,7 @@ interface IJsonQueryBuilder{
      * @return $this
      */
     public function tap(callable $callback): self;
+
 
 
 

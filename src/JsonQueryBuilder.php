@@ -13,8 +13,6 @@ final class JsonQueryBuilder implements IJsonQueryBuilder {
     protected array $query = [];
     protected string $endpoint;
 
-    private bool $isRequestValue = false;
-
     public function __construct(JsonApiApiLoader $loader){
         $this->loader = $loader;
     }
@@ -36,6 +34,36 @@ final class JsonQueryBuilder implements IJsonQueryBuilder {
 
     public function whereIn(string $key, array $values) : self{
         $this->query['where_in'][] = compact('key', 'values');
+        return $this;
+    }
+
+    public function whereNotIn(string $key, array $values): self {
+        $this->query['where_not_in'][] = compact('key', 'values');
+
+        return $this;
+    }
+
+    public function whereBetween(string $key, array $range): self {
+        if (count($range) !== 2) {
+            throw new \InvalidArgumentException('The range array must have exactly two elements: [min, max]');
+        }
+
+        [$min, $max] = $range;
+
+        $this->query['where_between'][] = compact('key', 'min', 'max');
+
+        return $this;
+    }
+
+    public function whereNotBetween(string $key, array $range): self {
+        if (count($range) !== 2) {
+            throw new \InvalidArgumentException('The range array must have exactly two elements: [min, max].');
+        }
+
+        [$min, $max] = $range;
+
+        $this->query['where_not_between'][] = compact('key', 'min', 'max');
+
         return $this;
     }
 
@@ -285,6 +313,18 @@ final class JsonQueryBuilder implements IJsonQueryBuilder {
             $data = $this->applyTransform($data);
         }
 
+        if (!empty($this->query['where_between'])) {
+            $data = $this->applyWhereBetween($data);
+        }
+
+        if (!empty($this->query['where_not_in'])) {
+            $data = $this->applyWhereNotIn($data);
+        }
+
+        if (!empty($this->query['where_not_between'])) {
+            $data = $this->applyWhereNotBetween($data);
+        }
+
         if (!empty($this->query['limit'])) {
             $data = $this->applyLimit($data);
         }
@@ -510,13 +550,47 @@ final class JsonQueryBuilder implements IJsonQueryBuilder {
         });
     }
 
-    private function isTimestamps(string $timestamp) : bool{
-        try {
-            $dateTime = new \DateTime($timestamp);
-            return $dateTime->format('c') === $timestamp;
-        } catch (\Exception $e) {
-            return false;
+    private function applyWhereBetween(array $data): array {
+        foreach ($this->query['where_between'] as $condition) {
+            $key = $condition['key'];
+            $min = $condition['min'];
+            $max = $condition['max'];
+
+            $data = array_filter($data, static function ($item) use ($key, $min, $max) {
+                $value = $item[$key] ?? null;
+                return $value !== null && $value >= $min && $value <= $max;
+            });
         }
+
+        return $data;
     }
 
+    private function applyWhereNotBetween(array $data): array {
+        foreach ($this->query['where_not_between'] as $condition) {
+            $key = $condition['key'];
+            $min = $condition['min'];
+            $max = $condition['max'];
+
+            $data = array_filter($data, static function ($item) use ($key, $min, $max) {
+                $value = $item[$key] ?? null;
+                return $value === null || $value < $min || $value > $max;
+            });
+        }
+
+        return $data;
+    }
+
+    private function applyWhereNotIn($data) : array{
+        foreach ($this->query['where_not_in'] as $condition) {
+            $key    = $condition['key'];
+            $values = $condition['values'];
+
+            $data = array_filter($data, static function ($item) use ($key, $values) {
+                $value = $item[$key] ?? null;
+                return $value === null || !in_array($value, $values, true);
+            });
+        }
+
+        return $data;
+    }
 }

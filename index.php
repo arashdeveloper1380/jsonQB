@@ -7,7 +7,11 @@ require 'vendor/autoload.php';
 
 $data = jsQB()
     ->from('https://api.escuelajs.co/api/v1/products')
+
     ->get();
+//    ->whereNotIn('id', [16, 19])
+//->whereNotBetween('price', [20,30])
+//    ->whereBetween('price', [20,30])
 //    ->tap(function ($query){
 //        $query->limit(20);
 //    })
