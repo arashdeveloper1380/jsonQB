@@ -11,3 +11,16 @@ jsQB()->metods()...
 
 $result = $queryBuilder->select(['id', 'name'])->get();
 
+
+```json
+[
+  {
+    "id": 1,
+    "name": "حسین نیکو"
+  },
+  {
+    "id": 2,
+    "name": "فاطمه رضایی"
+  }
+]
+
