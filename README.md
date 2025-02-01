@@ -6,7 +6,7 @@
 $queryBuilder = new JsonQueryBuilder($data);
 
 OR
-use helper function
+//use helper function
 jsQB()->metods()...
 
 $result = $queryBuilder->select(['id', 'name'])->get();
