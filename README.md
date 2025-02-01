@@ -1,7 +1,5 @@
 # JsonQueryBuilder
 
-### 1. **select()**
-
 ```php
 $queryBuilder = new JsonQueryBuilder($data);
 
